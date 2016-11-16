@@ -4,7 +4,8 @@ function initApp(){
 	$("#btnLogin").on("click", login);
 	$("#btnLogout").on("click", logout);
 	$("#btnShare").on("click", share);
-	//document.addEventListener('deviceready', initApp, false);
+	$("#btnAppRequest").on("click", fbRequest);
+	$("#btnAppInvite").on("click", fbInvite);
 }
 
 function login(){
@@ -46,4 +47,46 @@ function share(){
 
 function fbShareSuccess(){
 	alert("success share");
+}
+
+function fbRequest(){
+	facebookConnectPlugin.showDialog(
+				{
+					method: "apprequests",
+					message: "Come on man, check out my application.",
+					data: "",
+					title: "epwebapp",
+					actionType: 'askfor',
+					filters: 'app_non_users'
+				},
+				fbShareSuccess, 
+				function (error) { alert("" + error) }
+	)
+}
+
+function fbInvite(){
+	facebookConnectPlugin.appInvite(
+    {
+        url: "https://fb.me/1303938399678942",
+        picture: "http://example.com/image.png"
+    },
+    function(obj){
+        if(obj) {
+            if(obj.completionGesture == "cancel") {
+                // user canceled, bad guy
+				 alert("cancel");
+            } else {
+                // user really invited someone :)
+				alert("success to invite");
+            }
+        } else {
+            // user just pressed done, bad guy
+			alert("just press done");
+        }
+    },
+    function(error){
+        // error
+        alert("" + error);
+    }
+);
 }
